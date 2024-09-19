@@ -10,4 +10,18 @@ public partial class ProductsView : ContentPage
 
         BindingContext = vm;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        var vm = BindingContext as MainPageViewModel;
+
+        if (vm != null)
+        {
+            vm.ProductsList.Clear();
+
+            vm.GetProducts();
+        }      
+    }
 }

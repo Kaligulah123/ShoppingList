@@ -42,9 +42,9 @@ namespace ShoppingList.MVVM.ViewModels
         {
             _databaseService = databaseService;           
 
-            GetLists();
+            SubscribeShopLists();
 
-            GetProducts();
+            SubscribeProductsLists();
 
         }
 
@@ -54,7 +54,7 @@ namespace ShoppingList.MVVM.ViewModels
         //Metodos
         #region Metodos             
 
-        private void GetLists()
+        private void SubscribeShopLists()
         {            
             _databaseService.Client.Child("ShopList")
                                   .AsObservable<ShopList>()
@@ -96,8 +96,7 @@ namespace ShoppingList.MVVM.ViewModels
                                       }
                                   });
         }
-
-        private void GetProducts()
+        private void SubscribeProductsLists()
         {
             // Obtener todas las ShopLists de Firebase
             var shopListSnapshot = _databaseService.Client.Child("ShopList").OnceAsync<ShopList>();
@@ -152,6 +151,30 @@ namespace ShoppingList.MVVM.ViewModels
                                       }
 
                                   });
+        }
+
+        public async Task GetProducts()
+        {
+            ProductsList.Clear();
+
+            // Verificar que haya una lista seleccionada
+            if (SelectedList == null || string.IsNullOrWhiteSpace(SelectedList.Name))
+                return;
+
+            // Obtener todos los productos de Firebase
+            var productSnapshot = await _databaseService.Client.Child("Products").OnceAsync<Products>();
+
+            // Filtrar productos que coincidan con el ShopListName de la lista seleccionada
+            var matchingProducts = productSnapshot
+                                    .Where(product => product.Object.ShopListName == SelectedList.Name)
+                                    .Select(product => product.Object)
+                                    .ToList();
+
+            // Añadir los productos filtrados a la colección observable
+            foreach (var product in matchingProducts)
+            {
+                ProductsList.Add(product);
+            }
         }
 
         #endregion
@@ -209,13 +232,13 @@ namespace ShoppingList.MVVM.ViewModels
         [RelayCommand]
         private async Task AddProduct()
         {
-            if (string.IsNullOrWhiteSpace(ProductName)) return;
+            if (string.IsNullOrWhiteSpace(ProductName) || SelectedList?.Name == null) return;
 
             var product = new Products
             {
                 Name = ProductName,
 
-                ShopListName = SelectedList.Name
+                ShopListName = SelectedList?.Name
             };
 
             var result = await _databaseService.Client.Child("Products").PostAsync(product);         

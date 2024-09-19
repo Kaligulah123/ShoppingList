@@ -32,7 +32,7 @@
                     <Entry
                         Placeholder="Item Name"
                         PlaceholderColor="Black"
-                        Text="{Binding ListName}" />
+                        Text="{Binding ProductName}" />
                     <Button Command="{Binding AddProductCommand}" Text="Add" />
                 </VerticalStackLayout>
             </Grid>
@@ -49,7 +49,7 @@
                         HorizontalOptions="Center"
                         Text="ITEMS"
                         VerticalOptions="Center" />
-                    <CollectionView ItemsSource="{Binding ShopLists}">
+                    <CollectionView ItemsSource="{Binding ProductsList}">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
                         </CollectionView.ItemsLayout>
@@ -79,8 +79,6 @@
                                         </Border>
                                     </Grid>
                                 </SwipeView>
-
-
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
