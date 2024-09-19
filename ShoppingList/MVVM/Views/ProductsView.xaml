@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ShoppingList.MVVM.Views.ProductsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ShoppingList.MVVM.Models"
+    xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
+    Title="ItemsView"
+    x:DataType="viewmodels:MainPageViewModel"
+    BackgroundColor="#cfb422"
+    Shell.BackgroundColor="LightYellow">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="10">
+            <Grid Padding="10">
+                <Border
+                    BackgroundColor="#edf4fa"
+                    Stroke="Black"
+                    StrokeShape="RoundRectangle 10" />
+                <VerticalStackLayout Padding="10" Spacing="10">
+                    <Label
+                        FontSize="18"
+                        HorizontalOptions="Center"
+                        Text="{Binding SelectedList.Name, StringFormat='{0} List '}"
+                        VerticalOptions="Center" />
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        HorizontalOptions="Center"
+                        Text="INSERT NEW ITEM"
+                        VerticalOptions="Center" />
+                    <Entry
+                        Placeholder="Item Name"
+                        PlaceholderColor="Black"
+                        Text="{Binding ListName}" />
+                    <Button Command="{Binding AddProductCommand}" Text="Add" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid Padding="10">
+                <Border
+                    BackgroundColor="#edf4fa"
+                    Stroke="Black"
+                    StrokeShape="RoundRectangle 10" />
+                <VerticalStackLayout Padding="10" Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="22"
+                        HorizontalOptions="Center"
+                        Text="ITEMS"
+                        VerticalOptions="Center" />
+                    <CollectionView ItemsSource="{Binding ShopLists}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Products">
+                                <SwipeView>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem
+                                                BackgroundColor="red"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=DeleteProductCommand}"
+                                                CommandParameter="{Binding}"
+                                                IconImageSource="trash_regular_24.png" />
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid>
+                                        <Border
+                                            Padding="5,0,5,0"
+                                            BackgroundColor="White"
+                                            HeightRequest="60"
+                                            Stroke="Black"
+                                            StrokeShape="RoundRectangle 10">
+                                            <Label
+                                                FontSize="16"
+                                                Text="{Binding Name}"
+                                                VerticalOptions="Center" />
+                                        </Border>
+                                    </Grid>
+                                </SwipeView>
+
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Grid>
+
+
+
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+
+</ContentPage>
