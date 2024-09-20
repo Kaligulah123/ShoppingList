@@ -6,20 +6,20 @@
     xmlns:models="clr-namespace:ShoppingList.MVVM.Models"
     xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
     x:DataType="viewmodels:MainPageViewModel"
-    BackgroundColor="#cfb422"
+    BackgroundColor="#1C375C"
     Shell.NavBarIsVisible="False">
 
     <ScrollView>
         <VerticalStackLayout Spacing="10">
             <Grid Padding="10">
-                <Border
+                <Border              
                     BackgroundColor="#edf4fa"
-                    Stroke="Black"
+                    Stroke="White"
                     StrokeShape="RoundRectangle 10" />
                 <VerticalStackLayout Padding="10" Spacing="10">
                     <Label
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="18"
                         HorizontalOptions="Center"
                         Text="INSERT NEW LIST"
                         VerticalOptions="Center" />
@@ -27,20 +27,20 @@
                         Placeholder="List Name"
                         PlaceholderColor="Black"
                         Text="{Binding ListName}" />
-                    <Button Command="{Binding CreateListCommand}" Text="Create" />
+                    <Button Command="{Binding CreateListCommand}" Text="Create" BackgroundColor="#1C375C" />
                 </VerticalStackLayout>
 
             </Grid>
 
             <Grid Padding="10">
-                <Border
+                <Border        
                     BackgroundColor="#edf4fa"
-                    Stroke="Black"
+                    Stroke="White"
                     StrokeShape="RoundRectangle 10" />
                 <VerticalStackLayout Padding="10" Spacing="10">
                     <Label
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="18"
                         HorizontalOptions="Center"
                         Text="LISTS"
                         VerticalOptions="Center" />
@@ -63,35 +63,27 @@
                                     <Grid>
                                         <Border
                                             Padding="5,0,5,0"
-                                            BackgroundColor="White"
-                                            Stroke="Black"
-                                            StrokeShape="RoundRectangle 10"                                           
-                                            HeightRequest="60">
+                                             BackgroundColor="White"
+                                            Stroke="White"
+                                            StrokeShape="RoundRectangle 10">
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=OpenListCommand}" CommandParameter="{Binding}" />
                                             </Border.GestureRecognizers>
                                             <Grid ColumnDefinitions=".8*,.15*">
                                                 <VerticalStackLayout Padding="5" Spacing="5">
-                                                    <Label Text="{Binding Name}" FontSize="20"/>
-                                                    <Label Text="{Binding CreatedAt}" FontSize="12" />
+                                                    <Label Text="{Binding Name}" FontSize="16"/>
+                                                    <Label Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}" FontSize="12" />
                                                 </VerticalStackLayout>
                                                 <ImageButton Grid.Column="1" Source="heart_regular_24.png" MaximumHeightRequest="25" MaximumWidthRequest="25" HeightRequest="25"/>
                                             </Grid>
                                         </Border>
                                     </Grid>
                                 </SwipeView>
-
-
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
             </Grid>
-
-
-
-
-
         </VerticalStackLayout>
     </ScrollView>
 

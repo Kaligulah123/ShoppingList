@@ -24,10 +24,15 @@ namespace ShoppingList
 #endif         
             builder.Services.AddSingleton<DatabaseService>();
 
-            builder.Services.AddSingleton<MainPage>()
-                            .AddSingleton<MainPageViewModel>();
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainPageViewModel>();
 
-            builder.Services.AddSingleton<ProductsView>();
+            builder.Services.AddTransient<LoginView>();
+            builder.Services.AddTransient<LoginViewModel>();
+
+            builder.Services.AddTransient<RegisterView>();
+
+            builder.Services.AddTransient<ProductsView>();
                            
 
             return builder.Build();           

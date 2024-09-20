@@ -14,8 +14,8 @@ namespace ShoppingList
         }
         private void RegisterRoutes()
         {
-            Routing.RegisterRoute("ProductsView", typeof(ProductsView));          
-
+            Routing.RegisterRoute("ProductsView", typeof(ProductsView));
+            Routing.RegisterRoute("RegisterView", typeof(RegisterView));
         }
     }
 }

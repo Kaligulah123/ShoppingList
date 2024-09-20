@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ShoppingList.MVVM.Views.RegisterView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
+    Title="RegisterView"
+    x:DataType="viewmodels:LoginViewModel">
+    <Grid
+        Padding="20,50,20,0"
+        HorizontalOptions="FillAndExpand"
+        RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+        RowSpacing="20"
+        VerticalOptions="FillAndExpand">
+        <Label
+            Grid.Row="0"
+            FontAttributes="Bold"
+            FontSize="24"
+            HorizontalOptions="CenterAndExpand"
+            Text="Registration"
+            TextColor="#1C375C" />
+        <Label
+            Grid.Row="1"
+            Margin="0,-15,0,0"
+            HorizontalOptions="CenterAndExpand"
+            Text="Register With Email"
+            TextColor="#1C375C" />
+        <Entry
+            Grid.Row="2"
+            Margin="0,20,0,0"
+            HorizontalOptions="FillAndExpand"
+            IsEnabled="{Binding IsEntriesNotEnabled}"
+            Placeholder="Email like xxx@xxx.com"
+            Text="{Binding Email}"
+            VerticalOptions="FillAndExpand" />
+        <Entry
+            Grid.Row="3"
+            HorizontalOptions="FillAndExpand"
+            IsEnabled="{Binding IsEntriesNotEnabled}"
+            IsPassword="True"
+            Placeholder="Password must be at least 6 characters"
+            Text="{Binding Password}"
+            VerticalOptions="FillAndExpand" />
+        <Button
+            Grid.Row="4"
+            BackgroundColor="#1C375C"
+            Command="{Binding RegisterUserCommand}"
+            CornerRadius="20"
+            IsEnabled="{Binding IsEntriesNotEnabled}"
+            Text="Register" />
+        <ActivityIndicator
+            Grid.Row="5"
+            IsRunning="{Binding RegisterUserCommand.IsRunning}"
+            VerticalOptions="Center"
+            Color="#1C375C" />
+    </Grid>
+</ContentPage>

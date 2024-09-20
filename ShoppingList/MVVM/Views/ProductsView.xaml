@@ -7,25 +7,25 @@
     xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
     Title="ItemsView"
     x:DataType="viewmodels:MainPageViewModel"
-    BackgroundColor="#cfb422"
-    Shell.BackgroundColor="LightYellow">
+    BackgroundColor="#1C375C"
+    Shell.BackgroundColor="#1C375C">
 
     <ScrollView>
         <VerticalStackLayout Spacing="10">
             <Grid Padding="10">
                 <Border
                     BackgroundColor="#edf4fa"
-                    Stroke="Black"
+                    Stroke="White"
                     StrokeShape="RoundRectangle 10" />
                 <VerticalStackLayout Padding="10" Spacing="10">
                     <Label
-                        FontSize="18"
+                        FontSize="16"
                         HorizontalOptions="Center"
                         Text="{Binding SelectedList.Name, StringFormat='{0} List '}"
                         VerticalOptions="Center" />
                     <Label
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="18"
                         HorizontalOptions="Center"
                         Text="INSERT NEW ITEM"
                         VerticalOptions="Center" />
@@ -33,20 +33,23 @@
                         Placeholder="Item Name"
                         PlaceholderColor="Black"
                         Text="{Binding ProductName}" />
-                    <Button Command="{Binding AddProductCommand}" Text="Add" />
+                    <Button
+                        BackgroundColor="#1C375C"
+                        Command="{Binding AddProductCommand}"
+                        Text="Add" />
                 </VerticalStackLayout>
             </Grid>
 
             <Grid Padding="10">
                 <Border
                     BackgroundColor="#edf4fa"
-                    Stroke="Black"
+                    Stroke="White"
                     StrokeShape="RoundRectangle 10" />
                 <HorizontalStackLayout />
                 <VerticalStackLayout Padding="10" Spacing="10">
                     <Label
                         FontAttributes="Bold"
-                        FontSize="22"
+                        FontSize="18"
                         HorizontalOptions="Center"
                         Text="ITEMS"
                         VerticalOptions="Center" />
@@ -70,13 +73,16 @@
                                         <Border
                                             Padding="5,0,5,0"
                                             BackgroundColor="White"
-                                            HeightRequest="60"
-                                            Stroke="Black"
+                                            Stroke="White"
                                             StrokeShape="RoundRectangle 10">
                                             <HorizontalStackLayout>
-                                                <CheckBox IsChecked="{Binding IsChecked}" VerticalOptions="Center" CheckedChanged="checkBox_CheckedChanged"/>
+                                                <CheckBox
+                                                    CheckedChanged="checkBox_CheckedChanged"
+                                                    IsChecked="{Binding IsChecked}"
+                                                    VerticalOptions="Center"
+                                                    Color="#1C375C" />
                                                 <Label
-                                                    FontSize="20"
+                                                    FontSize="16"
                                                     Text="{Binding Name}"
                                                     VerticalOptions="Center">
                                                     <Label.Triggers>
