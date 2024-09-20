@@ -42,6 +42,7 @@
                     BackgroundColor="#edf4fa"
                     Stroke="Black"
                     StrokeShape="RoundRectangle 10" />
+                <HorizontalStackLayout />
                 <VerticalStackLayout Padding="10" Spacing="10">
                     <Label
                         FontAttributes="Bold"
@@ -72,10 +73,29 @@
                                             HeightRequest="60"
                                             Stroke="Black"
                                             StrokeShape="RoundRectangle 10">
-                                            <Label
-                                                FontSize="16"
-                                                Text="{Binding Name}"
-                                                VerticalOptions="Center" />
+                                            <HorizontalStackLayout>
+                                                <CheckBox IsChecked="{Binding IsChecked}" VerticalOptions="Center" CheckedChanged="checkBox_CheckedChanged"/>
+                                                <Label
+                                                    FontSize="20"
+                                                    Text="{Binding Name}"
+                                                    VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding IsChecked}"
+                                                            TargetType="Label"
+                                                            Value="True">
+                                                            <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=UpdateProductCommand}" CommandParameter="{Binding}" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </HorizontalStackLayout>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=UpdateProductCommand}" CommandParameter="{Binding}" />
+                                            </Border.GestureRecognizers>
+
                                         </Border>
                                     </Grid>
                                 </SwipeView>

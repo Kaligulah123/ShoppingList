@@ -72,7 +72,7 @@
                                             </Border.GestureRecognizers>
                                             <Grid ColumnDefinitions=".8*,.15*">
                                                 <VerticalStackLayout Padding="5" Spacing="5">
-                                                    <Label Text="{Binding Name}" FontSize="16"/>
+                                                    <Label Text="{Binding Name}" FontSize="20"/>
                                                     <Label Text="{Binding CreatedAt}" FontSize="12" />
                                                 </VerticalStackLayout>
                                                 <ImageButton Grid.Column="1" Source="heart_regular_24.png" MaximumHeightRequest="25" MaximumWidthRequest="25" HeightRequest="25"/>
