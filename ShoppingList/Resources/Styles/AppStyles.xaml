@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:ShoppingList.MVVM.Models"
+    xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
+    x:DataType="viewmodels:MainPageViewModel">
+
+    <!--  Template para la CollectionView de las listas  -->
+    <DataTemplate x:Key="NotSharedStyle" x:DataType="models:ShopList">
+        <SwipeView>
+            <SwipeView.RightItems>
+                <SwipeItems>
+                    <SwipeItem
+                        BackgroundColor="red"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=DeleteListCommand}"
+                        CommandParameter="{Binding}"
+                        IconImageSource="trash_regular_24.png" />
+                </SwipeItems>
+            </SwipeView.RightItems>
+            <Grid>
+                <Border
+                    Padding="5,0,5,0"
+                    BackgroundColor="White"
+                    Stroke="White"
+                    StrokeShape="RoundRectangle 10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=OpenListCommand}" CommandParameter="{Binding}" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions=".8*,.15*">
+                        <VerticalStackLayout Padding="5" Spacing="5">
+                            <Label FontSize="16" Text="{Binding Name}" />
+                            <Label Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}" FontSize="12" />
+                            <!--<Label FontSize="12" Text="{Binding Code}" />-->
+                        </VerticalStackLayout>
+                        <ImageButton
+                            Grid.Column="1"
+                            HeightRequest="25"
+                            MaximumHeightRequest="25"
+                            MaximumWidthRequest="25"
+                            Source="share_alt_regular_60.png">
+                            <ImageButton.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=ShareListCommand}" CommandParameter="{Binding}" />
+                            </ImageButton.GestureRecognizers>
+                        </ImageButton>
+                    </Grid>
+                </Border>
+            </Grid>
+        </SwipeView>
+    </DataTemplate>
+
+    <DataTemplate x:Key="IsSharedStyle" x:DataType="models:ShopList">
+        <SwipeView>
+            <SwipeView.RightItems>
+                <SwipeItems>
+                    <SwipeItem
+                     BackgroundColor="red"
+                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=DeleteListCommand}"
+                     CommandParameter="{Binding}"
+                     IconImageSource="trash_regular_24.png" />
+                </SwipeItems>
+            </SwipeView.RightItems>
+            <Grid>
+                <Border
+                 Padding="5,0,5,0"
+                 BackgroundColor="LightYellow"
+                 Stroke="White"
+                 StrokeShape="RoundRectangle 10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=OpenListCommand}" CommandParameter="{Binding}" />
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions=".7*,.15*,.15*">
+                        <VerticalStackLayout Padding="5" Spacing="5">
+                            <Label FontSize="16" Text="{Binding Name}" />
+                            <Label Text="{Binding CreatedAt, StringFormat='{0:dd/MM/yyyy}'}" FontSize="12" />
+                            <!--<Label FontSize="12" Text="{Binding Code}" />-->
+                        </VerticalStackLayout>
+                        <Label FontSize="14" Text="Shared!" FontAttributes="Italic" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                        <ImageButton
+                         Grid.Column="2"
+                         HeightRequest="25"
+                         MaximumHeightRequest="25"
+                         MaximumWidthRequest="25"
+                         Source="share_alt_regular_60.png">
+                            <ImageButton.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=ShareListCommand}" CommandParameter="{Binding}" />
+                            </ImageButton.GestureRecognizers>
+                        </ImageButton>
+                    </Grid>
+                </Border>
+            </Grid>
+        </SwipeView>
+    </DataTemplate>
+
+</ResourceDictionary>

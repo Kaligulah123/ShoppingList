@@ -62,7 +62,7 @@ namespace ShoppingList.MVVM.ViewModels
 
                 var Uid = credentials.User.Uid;
 
-                Preferences.Default.Set("credentials", Uid);
+                Preferences.Default.Set("UserId", Uid);
                 //string credentials = Preferences.Default.Get("credentials", "noToken");
 
                 await Shell.Current.GoToAsync("//MainPage");
@@ -72,6 +72,7 @@ namespace ShoppingList.MVVM.ViewModels
                 await Shell.Current.DisplayAlert("ALERT!", ex.Message, "OK");
             }
         }
+
 
         [RelayCommand]
         private async Task RegisterUser()

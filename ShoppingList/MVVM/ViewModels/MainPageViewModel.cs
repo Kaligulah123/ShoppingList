@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Database.Query;
 using ShoppingList.Data;
+using ShoppingList.Helpers;
 using ShoppingList.MVVM.Models;
 using System;
 using System.Collections.Generic;
@@ -43,8 +44,12 @@ namespace ShoppingList.MVVM.ViewModels
             //SubscribeShopLists();
 
             //SubscribeProductsLists();
-            SubscribeToCollection("ShopList", ShopLists, shopList => shopList.Name);
-            SubscribeToCollection("Products", ProductsList, product => product.Name);
+
+            var currentUserId = Preferences.Get("UserId", null);
+
+            SubscribeToCollection("ShopList", ShopLists, shopList => shopList.Name, true, currentUserId);
+
+            SubscribeToCollection("Products", ProductsList, product => product.Name, false);
         }
 
         #endregion
@@ -53,43 +58,53 @@ namespace ShoppingList.MVVM.ViewModels
         //Metodos
         #region Metodos             
 
-        private void SubscribeToCollection<T>(string collectionName, ObservableCollection<T> observableCollection, Func<T, string> getKey) where T : class
+        private void SubscribeToCollection<T>(string collectionName, ObservableCollection<T> observableCollection, Func<T, string> getKey, bool filterByUser = false, string? currentUserId = null) where T : class
         {
             _databaseService.Client.Child(collectionName)
-                                  .AsObservable<T>()
-                                  .Subscribe(dataSnapshot =>
-                                  {
-                                      var item = dataSnapshot.Object;
+                           .AsObservable<T>()
+                           .Subscribe(dataSnapshot =>
+                           {
+                               var item = dataSnapshot.Object;
 
-                                      switch (dataSnapshot.EventType)
-                                      {
-                                          case Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate:
-                                              if (item != null)
-                                              {
-                                                  var existingItem = observableCollection.FirstOrDefault(i => getKey(i) == getKey(item));
-                                                  if (existingItem != null)
-                                                  {
-                                                      // Actualiza el item existente
-                                                      var index = observableCollection.IndexOf(existingItem);
-                                                      observableCollection[index] = item;
-                                                  }
-                                                  else
-                                                  {
-                                                      // Agrega el nuevo item
-                                                      observableCollection.Add(item);
-                                                  }
-                                              }
-                                              break;
+                               // Filtrar solo si es una ShopList y necesitamos aplicar el filtro por usuario
+                               if (filterByUser && item is ShopList shopList)
+                               {
+                                   // Verificar si el usuario actual está en la lista de usuarios de la ShopList
+                                   if (currentUserId == null || !shopList.Users.Contains(currentUserId))
+                                   {
+                                       return; // No agregar esta lista porque no pertenece al usuario actual
+                                   }
+                               }
 
-                                          case Firebase.Database.Streaming.FirebaseEventType.Delete:
-                                              var itemToRemove = observableCollection.FirstOrDefault(i => getKey(i) == getKey(item));
-                                              if (itemToRemove != null)
-                                              {
-                                                  observableCollection.Remove(itemToRemove);
-                                              }
-                                              break;
-                                      }
-                                  });
+                               switch (dataSnapshot.EventType)
+                               {
+                                   case Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate:
+                                       if (item != null)
+                                       {
+                                           var existingItem = observableCollection.FirstOrDefault(i => getKey(i) == getKey(item));
+                                           if (existingItem != null)
+                                           {
+                                               // Actualiza el item existente
+                                               var index = observableCollection.IndexOf(existingItem);
+                                               observableCollection[index] = item;
+                                           }
+                                           else
+                                           {
+                                               // Agrega el nuevo item
+                                               observableCollection.Add(item);
+                                           }
+                                       }
+                                       break;
+
+                                   case Firebase.Database.Streaming.FirebaseEventType.Delete:
+                                       var itemToRemove = observableCollection.FirstOrDefault(i => getKey(i) == getKey(item));
+                                       if (itemToRemove != null)
+                                       {
+                                           observableCollection.Remove(itemToRemove);
+                                       }
+                                       break;
+                               }
+                           });
         }
 
         //private void SubscribeShopLists()
@@ -286,16 +301,77 @@ namespace ShoppingList.MVVM.ViewModels
         {
             if (string.IsNullOrWhiteSpace(ListName)) return;
 
+            var currentUser = Preferences.Get("UserId", null);
+
+            if (string.IsNullOrWhiteSpace(currentUser)) return;
+
             var newShopList = new ShopList
             {
                 Name = ListName,
 
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+
+                Code = MathHelper.GenerateRandomCode(),
+
+                Users = new List<string> { currentUser }
             };
 
             var result = await _databaseService.Client.Child("ShopList").PostAsync(newShopList);
 
             ListName = string.Empty;
+
+            //// Crea el enlace de WhatsApp
+            //string message = $"Acabo de crear una nueva lista: {newShopList.Name}. El código es: {newShopList.Code}";
+            //string phoneNumber = "+34699411368"; // Reemplaza con el número al que quieras enviar el mensaje
+            //string whatsappUrl = $"https://wa.me/{phoneNumber}?text={Uri.EscapeDataString(message)}";
+
+            //// Abre WhatsApp para enviar el mensaje
+            //await Launcher.OpenAsync(whatsappUrl);          
+        }
+
+
+        [RelayCommand]
+        private async Task ShareList(ShopList shopList)
+        {
+            if (shopList == null) return;
+
+            // Crea el mensaje para compartir
+            string message = $"I,ve just created a new list: {shopList.Name}. Code: {shopList.Code}";
+
+            // Abre el diálogo de compartir
+            await Share.Default.RequestAsync(new ShareTextRequest
+            {
+                Text = message,
+
+                Title = "Share List"
+            });
+
+            // Solicita una confirmación al usuario
+            bool isShared = await Shell.Current.DisplayAlert("Share", "Did you share the list?", "Yes", "No");
+
+            if (isShared)
+            {
+                // El usuario confirmó que compartió la lista
+                await Shell.Current.DisplayAlert("Shared", "Thank you for sharing the list!", "OK");
+
+                shopList.IsShared = true;
+
+                // Encuentra el ID (Key) de la lista en Firebase
+                var existingShopList = (await _databaseService.Client
+                                    .Child("ShopList")
+                                    .OnceAsync<ShopList>())
+                                    .FirstOrDefault(p => p.Object.Name == shopList.Name);
+
+                if (existingShopList != null)
+                {                  
+                    await _databaseService.Client.Child($"ShopList/{existingShopList.Key}").PutAsync(shopList);
+                }
+                else
+                {
+                    // El usuario canceló la operación
+                    await Shell.Current.DisplayAlert("Cancelled", "It seems you didn't share the list.", "OK");
+                }
+            }
         }
 
 

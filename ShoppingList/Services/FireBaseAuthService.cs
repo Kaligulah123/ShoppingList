@@ -44,6 +44,7 @@ namespace ShoppingList.Services
 
             return userCredential;
         }
+             
 
         public async Task<UserCredential> RegisterUser(string email, string password)
         {
@@ -53,5 +54,7 @@ namespace ShoppingList.Services
 
             return userCredential;
         }
+
+
     }
 }

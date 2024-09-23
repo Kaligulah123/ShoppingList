@@ -59,9 +59,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\copy_alt_regular_60.png" />
 	  <None Remove="Resources\Images\edit_solid_24.png" />
 	  <None Remove="Resources\Images\heart_regular_24.png" />
 	  <None Remove="Resources\Images\heart_solid_24.png" />
+	  <None Remove="Resources\Images\share_alt_regular_60.png" />
 	  <None Remove="Resources\Images\trash_regular_24.png" />
 	</ItemGroup>
 
@@ -83,6 +85,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\RegisterView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\AppStyles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
