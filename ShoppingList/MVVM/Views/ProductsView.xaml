@@ -6,6 +6,8 @@
     xmlns:models="clr-namespace:ShoppingList.MVVM.Models"
     xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
     Title="ItemsView"
+    Shell.TitleColor="white"
+    Shell.ForegroundColor="White"
     x:DataType="viewmodels:MainPageViewModel"
     BackgroundColor="#1C375C"
     Shell.BackgroundColor="#1C375C">
@@ -19,9 +21,9 @@
                     StrokeShape="RoundRectangle 10" />
                 <VerticalStackLayout Padding="10" Spacing="10">
                     <Label
-                        FontSize="16"
+                        FontSize="14"
                         HorizontalOptions="Center"
-                        Text="{Binding SelectedList.Name, StringFormat='{0} List '}"
+                        Text="{Binding SelectedList.Name, StringFormat='List Name: {0}'}"
                         VerticalOptions="Center" />
                     <Label
                         FontAttributes="Bold"

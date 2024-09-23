@@ -8,10 +8,10 @@
     Title="ShoppingList"
     Shell.FlyoutBehavior="Disabled">
 
-    <!--<ShellContent
+    <ShellContent
         Title="LoginView"
         ContentTemplate="{DataTemplate views:LoginView}"
-        Route="LoginView" />-->
+        Route="LoginView" />
 
     <ShellContent
         Title="MainPage"

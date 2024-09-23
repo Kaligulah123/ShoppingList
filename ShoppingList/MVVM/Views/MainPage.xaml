@@ -52,13 +52,26 @@
                         HorizontalOptions="Center"
                         Text="LISTS"
                         VerticalOptions="Center" />
-                    <CollectionView ItemsSource="{Binding ShopLists}" ItemTemplate="{StaticResource ShopListSelector}">
+                    <CollectionView ItemTemplate="{StaticResource ShopListSelector}" ItemsSource="{Binding ShopLists}">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
-                        </CollectionView.ItemsLayout>                                                
+                        </CollectionView.ItemsLayout>
                     </CollectionView>
                 </VerticalStackLayout>
             </Grid>
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Label Text="Do yo have a shared code?"  TextColor="White"/>
+                <Label
+                    FontAttributes="Bold"
+                    Text="Click here"
+                    TextColor="#4a90e2"
+                    TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AddListFromCodeCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 
