@@ -6,11 +6,11 @@
     xmlns:models="clr-namespace:ShoppingList.MVVM.Models"
     xmlns:viewmodels="clr-namespace:ShoppingList.MVVM.ViewModels"
     Title="ItemsView"
-    Shell.TitleColor="white"
-    Shell.ForegroundColor="White"
     x:DataType="viewmodels:MainPageViewModel"
     BackgroundColor="#1C375C"
-    Shell.BackgroundColor="#1C375C">
+    Shell.BackgroundColor="#1C375C"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="white">
 
     <ScrollView>
         <VerticalStackLayout Spacing="10">
@@ -41,84 +41,108 @@
                         Text="Add" />
                 </VerticalStackLayout>
             </Grid>
-
             <Grid Padding="10">
-                <Border
-                    BackgroundColor="#edf4fa"
-                    Stroke="White"
-                    StrokeShape="RoundRectangle 10" />
-                <HorizontalStackLayout />
-                <VerticalStackLayout Padding="10" Spacing="10">
+                <Grid ColumnDefinitions=".3*,.7*">
+                    <Border
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="#edf4fa"
+                        Stroke="White"
+                        StrokeShape="RoundRectangle 10" />
                     <Label
+                        Margin="0,10,0,0"
                         FontAttributes="Bold"
-                        FontSize="18"
                         HorizontalOptions="Center"
-                        Text="ITEMS"
-                        VerticalOptions="Center" />
-                    <CollectionView ItemsSource="{Binding ProductsList}">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Products">
-                                <SwipeView>
-                                    <SwipeView.RightItems>
-                                        <SwipeItems>
-                                            <SwipeItem
-                                                BackgroundColor="red"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=DeleteProductCommand}"
-                                                CommandParameter="{Binding}"
-                                                IconImageSource="trash_regular_24.png" />
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
-                                    <Grid>
-                                        <Border
-                                            Padding="5,0,5,0"
-                                            BackgroundColor="White"
-                                            Stroke="White"
-                                            StrokeShape="RoundRectangle 10">
-                                            <HorizontalStackLayout>
-                                                <CheckBox
-                                                    CheckedChanged="checkBox_CheckedChanged"
-                                                    IsChecked="{Binding IsChecked}"
-                                                    VerticalOptions="Center"
-                                                    Color="#1C375C" />
-                                                <Label
-                                                    FontSize="16"
-                                                    Text="{Binding Name}"
-                                                    VerticalOptions="Center">
-                                                    <Label.Triggers>
-                                                        <DataTrigger
-                                                            Binding="{Binding IsChecked}"
-                                                            TargetType="Label"
-                                                            Value="True">
-                                                            <Setter Property="TextDecorations" Value="Strikethrough" />
-                                                        </DataTrigger>
-                                                    </Label.Triggers>
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=UpdateProductCommand}" CommandParameter="{Binding}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                            </HorizontalStackLayout>
-                                            <Border.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=UpdateProductCommand}" CommandParameter="{Binding}" />
-                                            </Border.GestureRecognizers>
-
-                                        </Border>
-                                    </Grid>
-                                </SwipeView>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
+                        Text="Unmark All"
+                        TextColor="#1C375C"
+                        TextDecorations="Underline"
+                        VerticalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding UnmarkAllProductsCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <VerticalStackLayout
+                        Grid.ColumnSpan="2"
+                        Padding="10"
+                        Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            Text="ITEMS"
+                            VerticalOptions="Center" />
+                        <CollectionView ItemsSource="{Binding ProductsList}">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Products">
+                                    <SwipeView>
+                                        <SwipeView.RightItems>
+                                            <SwipeItems>
+                                                <SwipeItem
+                                                    BackgroundColor="red"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=DeleteProductCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    IconImageSource="trash_regular_24.png" />
+                                            </SwipeItems>
+                                        </SwipeView.RightItems>
+                                        <Grid>
+                                            <Border
+                                                Padding="5,0,5,0"
+                                                BackgroundColor="White"
+                                                Stroke="White"
+                                                StrokeShape="RoundRectangle 10">
+                                                <HorizontalStackLayout>
+                                                    <CheckBox
+                                                        IsChecked="{Binding IsChecked}"
+                                                        VerticalOptions="Center"
+                                                        Color="#1C375C" />
+                                                    <Label
+                                                        FontSize="16"
+                                                        Text="{Binding Name}"
+                                                        VerticalOptions="Center">
+                                                        <Label.Triggers>
+                                                            <DataTrigger
+                                                                Binding="{Binding IsChecked}"
+                                                                TargetType="Label"
+                                                                Value="True">
+                                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                            </DataTrigger>
+                                                        </Label.Triggers>
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=UpdateProductCommand}" CommandParameter="{Binding}" />
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
+                                                </HorizontalStackLayout>
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainPageViewModel}}, Path=UpdateProductCommand}" CommandParameter="{Binding}" />
+                                                </Border.GestureRecognizers>
+                                            </Border>
+                                        </Grid>
+                                    </SwipeView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Grid>
+                <Frame
+                    BackgroundColor="White"
+                    HorizontalOptions="FillAndExpand"
+                    IsVisible="{Binding IsBusy}"
+                    Opacity="0.5"
+                    VerticalOptions="FillAndExpand">
+                    <ActivityIndicator
+                        HorizontalOptions="Center"
+                        IsRunning="{Binding IsBusy}"
+                        VerticalOptions="Start"
+                        Color="#1C375C" />
+                </Frame>
             </Grid>
-
-
-
-
-
+            <!--<ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                VerticalOptions="Start"
+                Color="#2A496F" />-->
         </VerticalStackLayout>
     </ScrollView>
-
-
 </ContentPage>

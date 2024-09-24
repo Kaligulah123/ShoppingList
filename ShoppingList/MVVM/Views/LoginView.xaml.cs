@@ -9,17 +9,25 @@ public partial class LoginView : ContentPage
 		InitializeComponent();
 
 		BindingContext = vm;
-	}
+	}     
 
-    protected override void OnAppearing()
+    protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        base.OnAppearing();
+        base.OnNavigatedTo(args);
 
-		var vm = BindingContext as LoginViewModel;
+        var logged = Preferences.Get("UserId", null);
 
-		if (vm != null)
-		{
-			vm.ClearCredentials();
-		}
+        if (logged != null)
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+
+        var vm = BindingContext as LoginViewModel;
+
+        if (vm != null)
+        {
+            vm.ClearCredentials();
+        }
     }
+    
 }

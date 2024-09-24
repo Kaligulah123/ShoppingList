@@ -7,7 +7,7 @@
     Title="LoginView"
     x:DataType="viewmodels:LoginViewModel"
     Shell.NavBarIsVisible="False">
-   
+
     <Grid
         BackgroundColor="#1C375C"
         HorizontalOptions="FillAndExpand"
@@ -68,7 +68,6 @@
                     BackgroundColor="#1C375C"
                     Command="{Binding LoginUserCommand}"
                     CornerRadius="20"
-                    IsEnabled="{Binding IsEntriesNotEnabled}"
                     Text="Login" />
                 <Button
                     Grid.Row="5"
@@ -117,12 +116,19 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </HorizontalStackLayout>
-                <ActivityIndicator
-                    Grid.RowSpan="7"
-                    IsRunning="{Binding LoginUserCommand.IsRunning}"
-                    VerticalOptions="Center"
-                    Color="#1C375C" />
             </Grid>
         </Frame>
+        <Frame
+            Grid.RowSpan="2"
+            BackgroundColor="White"
+            IsVisible="{Binding LoginUserCommand.IsRunning}"
+            Opacity="0.5">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding LoginUserCommand.IsRunning}"
+                VerticalOptions="Start"
+                Color="#1C375C" />
+        </Frame>
+
     </Grid>
 </ContentPage>

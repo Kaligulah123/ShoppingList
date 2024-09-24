@@ -17,8 +17,12 @@ namespace ShoppingList.MVVM.ViewModels
 
         //Campos
         #region Campos
-        public string? Email { get; set; }
-        public string? Password { get; set; }
+
+        [ObservableProperty]
+        public string? _email;
+
+        [ObservableProperty]
+        public string? _password;
 
         [ObservableProperty]
         private bool _isEntriesNotEnabled = true;
@@ -28,7 +32,7 @@ namespace ShoppingList.MVVM.ViewModels
 
 
         //Constructor
-        #region Constructor
+        #region Constructor      
 
 
 
@@ -56,20 +60,25 @@ namespace ShoppingList.MVVM.ViewModels
 
             try
             {
+                IsEntriesNotEnabled = false;
+
                 FireBaseAuthService fireBaseAuthService = new();
 
                 var credentials = await fireBaseAuthService.LoginUser(Email, Password);
 
                 var Uid = credentials.User.Uid;
 
-                Preferences.Default.Set("UserId", Uid);
-                //string credentials = Preferences.Default.Get("credentials", "noToken");
+                Preferences.Set("UserId", Uid);                            
 
                 await Shell.Current.GoToAsync("//MainPage");
+
+                IsEntriesNotEnabled = true;
             }
             catch (Exception ex)
-            {
+            {               
                 await Shell.Current.DisplayAlert("ALERT!", ex.Message, "OK");
+
+                IsEntriesNotEnabled = true;
             }
         }
 
@@ -91,15 +100,15 @@ namespace ShoppingList.MVVM.ViewModels
 
                 if (Uid != null)
                 {
-                    await Shell.Current.DisplayAlert("Alert", "User Registered successfully!", "OK");
-
-                    IsEntriesNotEnabled = true;
+                    await Shell.Current.DisplayAlert("Alert", "User Registered successfully!", "OK");                   
 
                     await Shell.Current.GoToAsync("//LoginView");
+
+                    IsEntriesNotEnabled = true;
                 }
             }
             catch (Exception ex)
-            {
+            {               
                 await Shell.Current.DisplayAlert("ALERT!", ex.Message, "OK");
 
                 IsEntriesNotEnabled = true;

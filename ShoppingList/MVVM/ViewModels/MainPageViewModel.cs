@@ -31,6 +31,9 @@ namespace ShoppingList.MVVM.ViewModels
         [ObservableProperty]
         private string? _productName;
 
+        [ObservableProperty]
+        private bool _isBusy;
+
         #endregion
 
 
@@ -39,15 +42,15 @@ namespace ShoppingList.MVVM.ViewModels
 
         public MainPageViewModel(DatabaseService databaseService)
         {
-            _databaseService = databaseService;
-
-            //SubscribeShopLists();
-
-            //SubscribeProductsLists();
+            _databaseService = databaseService;         
 
             var currentUserId = Preferences.Get("UserId", null);
 
+            IsBusy = true;
+
             SubscribeToCollection("ShopList", ShopLists, shopList => shopList.Name, true, currentUserId);
+
+            IsBusy = false;
 
             SubscribeToCollection("Products", ProductsList, product => product.Name, false);
         }
@@ -106,154 +109,13 @@ namespace ShoppingList.MVVM.ViewModels
                                }
                            });
         }
-
-        //private void SubscribeShopLists()
-        //{
-        //    _databaseService.Client.Child("ShopList")
-        //                          .AsObservable<ShopList>()
-        //                          .Subscribe(dataSnapshot =>
-        //                          {
-        //                              var shopList = dataSnapshot.Object;
-
-        //                              switch (dataSnapshot.EventType)
-        //                              {
-        //                                  case Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate:
-
-        //                                      if (shopList != null)
-        //                                      {
-        //                                          var existingItem = ShopLists.FirstOrDefault(item => item.Name == shopList.Name);
-
-        //                                          if (existingItem != null)
-        //                                          {
-        //                                              // Actualiza el item existente
-        //                                              var index = ShopLists.IndexOf(existingItem);
-
-        //                                              ShopLists[index] = shopList;
-        //                                          }
-        //                                          else
-        //                                          {
-        //                                              ShopLists.Add(shopList);
-        //                                          }
-        //                                      }
-        //                                      break;
-
-        //                                  case Firebase.Database.Streaming.FirebaseEventType.Delete:
-
-        //                                      var itemToRemove = ShopLists.FirstOrDefault(item => item.Name == shopList.Name);
-
-        //                                      if (itemToRemove != null)
-        //                                      {
-        //                                          ShopLists.Remove(itemToRemove);
-        //                                      }
-        //                                      break;
-        //                              }
-        //                          });
-        //}
-        ////private void SubscribeProductsLists()
-        ////{
-        ////    // Obtener todas las ShopLists de Firebase
-        ////    var shopListSnapshot = _databaseService.Client.Child("ShopList").OnceAsync<ShopList>();
-
-        ////    // Convertir las ShopLists a un diccionario o lista para fácil búsqueda
-        ////    var shopLists = shopListSnapshot.Result.Select(x => x.Object).ToList();
-
-        ////    // Suscribirse a los cambios en la colección de Products en Firebase
-        ////    _databaseService.Client.Child("Products")
-        ////                          .AsObservable<Products>()
-        ////                          .Subscribe(dataSnapshot =>
-        ////                          {
-        ////                              var product = dataSnapshot.Object;
-
-        ////                              if (product == null) return;
-
-        ////                              // Verificar si el producto está asociado a alguna ShopList por su ShopListName
-        ////                              var matchingShopList = shopLists.FirstOrDefault(shopList => shopList.Name == product.ShopListName);
-
-        ////                              if (matchingShopList == null) return;
-
-        ////                              switch (dataSnapshot.EventType)
-        ////                              {
-        ////                                  case Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate:
-
-        ////                                      // Verificar si el producto ya existe en la lista de productos
-        ////                                      var existingProduct = ProductsList.FirstOrDefault(item => item.Name == product.Name);
-
-        ////                                      if (existingProduct != null)
-        ////                                      {
-        ////                                          // Actualizar el producto existente
-        ////                                          var index = ProductsList.IndexOf(existingProduct);
-
-        ////                                          ProductsList[index] = product;
-        ////                                      }
-        ////                                      else
-        ////                                      {
-        ////                                          // Agregar el nuevo producto
-        ////                                          ProductsList.Add(product);
-        ////                                      }
-        ////                                      break;
-
-        ////                                  case Firebase.Database.Streaming.FirebaseEventType.Delete:
-        ////                                      // Eliminar el producto de la lista si coincide con la ShopList
-        ////                                      var productToRemove = ProductsList.FirstOrDefault(item => item.Name == product.Name);
-
-        ////                                      if (productToRemove != null)
-        ////                                      {
-        ////                                          ProductsList.Remove(productToRemove);
-        ////                                      }
-        ////                                      break;
-        ////                              }
-
-        ////                          });
-        ////}
-        //private void SubscribeProductsLists()
-        //{
-        //    _databaseService.Client.Child("Products")
-        //                          .AsObservable<Products>()
-        //                          .Subscribe(dataSnapshot =>
-        //                          {
-        //                              var product = dataSnapshot.Object;
-
-        //                              switch (dataSnapshot.EventType)
-        //                              {
-        //                                  case Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate:
-
-        //                                      if (product != null)
-        //                                      {
-        //                                          var existingItem = ProductsList.FirstOrDefault(item => item.Name == product.Name);
-
-        //                                          if (existingItem != null)
-        //                                          {
-        //                                              // Actualiza el item existente
-        //                                              var index = ProductsList.IndexOf(existingItem);
-
-        //                                              ProductsList[index] = product;
-        //                                          }
-        //                                          else
-        //                                          {
-        //                                              ProductsList.Add(product);
-        //                                          }
-        //                                      }
-        //                                      break;
-
-        //                                  case Firebase.Database.Streaming.FirebaseEventType.Delete:
-
-        //                                      var itemToRemove = ProductsList.FirstOrDefault(item => item.Name == product.Name);
-
-        //                                      if (itemToRemove != null)
-        //                                      {
-        //                                          ProductsList.Remove(itemToRemove);
-        //                                      }
-        //                                      break;
-        //                              }
-        //                          });
-        //}
+               
         public async Task GetProducts()
-        {
-            ProductsList.Clear();
-
+        {          
             // Verificar que haya una lista seleccionada
-            if (SelectedList == null || string.IsNullOrWhiteSpace(SelectedList.Name))
-                return;
+            if (SelectedList == null || string.IsNullOrWhiteSpace(SelectedList.Name)) return;           
+
+            IsBusy = true;
 
             // Obtener todos los productos de Firebase
             var productSnapshot = await _databaseService.Client.Child("Products").OnceAsync<Products>();
@@ -269,12 +131,34 @@ namespace ShoppingList.MVVM.ViewModels
             {
                 ProductsList.Add(product);
             }
+
+            IsBusy = false;
         }
+
+
+        //public async Task GetShopLists()
+        //{
+        //    ShopLists.Clear();
+
+        //    // Obtener todos los productos de Firebase
+        //    var shopListSnapshot = await _databaseService.Client.Child("ShopLists").OnceAsync<ShopList>();
+    
+        //    var matchingShopLists = shopListSnapshot
+        //                            .Where(shopList => shopList.Object.Users == SelectedList.Name)
+        //                            .Select(shopList => shopList.Object)
+        //                            .ToList();
+
+        //    // Añadir los productos filtrados a la colección observable
+        //    foreach (var product in matchingProducts)
+        //    {
+        //        ProductsList.Add(product);
+        //    }
+        //}
 
         [RelayCommand]
         public async Task UpdateProduct(Products product)
         {
-            if (product == null) return;
+            if (product == null) return;           
 
             var existingProduct = (await _databaseService.Client
                                 .Child("Products")
@@ -299,11 +183,25 @@ namespace ShoppingList.MVVM.ViewModels
         [RelayCommand]
         private async Task CreateList()
         {
-            if (string.IsNullOrWhiteSpace(ListName)) return;
+            if (string.IsNullOrWhiteSpace(ListName))
+            {
+                await Shell.Current.DisplayAlert("Warning", "you must provide a name", "Ok");
+
+                return;
+            }
 
             var currentUser = Preferences.Get("UserId", null);
 
-            if (string.IsNullOrWhiteSpace(currentUser)) return;
+            if (string.IsNullOrWhiteSpace(currentUser))
+            {
+                await Shell.Current.DisplayAlert("Error", "User not found", "Ok");
+
+                await Shell.Current.GoToAsync("//LoginView");
+
+                return;
+            }
+
+            IsBusy = true;
 
             var newShopList = new ShopList
             {
@@ -319,6 +217,8 @@ namespace ShoppingList.MVVM.ViewModels
             var result = await _databaseService.Client.Child("ShopList").PostAsync(newShopList);
 
             ListName = string.Empty;
+
+            IsBusy = false;
 
             //// Crea el enlace de WhatsApp
             //string message = $"Acabo de crear una nueva lista: {newShopList.Name}. El código es: {newShopList.Code}";
@@ -440,10 +340,12 @@ namespace ShoppingList.MVVM.ViewModels
 
         [RelayCommand]
         private async Task DeleteList(ShopList shopList)
-        {
+        {           
             SelectedList = shopList;
 
             var answer = await Shell.Current.DisplayAlert("ATENTION!", $"Do you really want to delete {SelectedList.Name} from Lists?", "YES", "NO");
+
+            IsBusy = true;
 
             if (answer)
             {
@@ -454,7 +356,19 @@ namespace ShoppingList.MVVM.ViewModels
                 if (shopListToDelete != null)
                 {
                     // Encuentra el UserId del usuario actual
-                    string userId = Preferences.Get("UserId", string.Empty); // Cambia "UserId" por la clave correcta en tus preferencias
+                    var userId = Preferences.Get("UserId", null); // Cambia "UserId" por la clave correcta en tus preferencias
+
+                    // Verificar si userId es nulo antes de continuar
+                    if (string.IsNullOrEmpty(userId))
+                    {
+                        await Shell.Current.DisplayAlert("Error", "User not found", "Ok");
+
+                        await Shell.Current.GoToAsync("//LoginView");
+
+                        IsBusy = false;
+
+                        return;
+                    }
 
                     // Si es el único usuario, elimina la lista completa
                     if (shopListToDelete.Object.Users.Count == 1 && shopListToDelete.Object.Users.Contains(userId))
@@ -501,12 +415,21 @@ namespace ShoppingList.MVVM.ViewModels
                     await Shell.Current.DisplayAlert("Error", "List not found.", "OK");
                 }
             }
+
+            IsBusy = false;
         }
 
         [RelayCommand]
         private async Task AddProduct()
         {
-            if (string.IsNullOrWhiteSpace(ProductName) || SelectedList?.Name == null) return;
+            if (string.IsNullOrWhiteSpace(ProductName) || SelectedList?.Name == null)
+            {
+                await Shell.Current.DisplayAlert("Warning!", "You must provide a name", "Ok");
+
+                return;
+            }
+
+            IsBusy = true;
 
             var product = new Products
             {
@@ -518,6 +441,8 @@ namespace ShoppingList.MVVM.ViewModels
             var result = await _databaseService.Client.Child("Products").PostAsync(product);
 
             ProductName = string.Empty;
+
+            IsBusy = false;
         }
 
         [RelayCommand]
@@ -526,6 +451,8 @@ namespace ShoppingList.MVVM.ViewModels
             if (product != null)
             {               
                 var answer = await Shell.Current.DisplayAlert("ATENTION!", $"Do you really want to delete {product.Name} from Lists?", "YES", "NO");
+
+                IsBusy = true;
 
                 if (answer)
                 {
@@ -542,8 +469,10 @@ namespace ShoppingList.MVVM.ViewModels
                     {
                         await Shell.Current.DisplayAlert("Error", "Product not found.", "OK");
                     }
-                }
+                }                
             }
+
+            IsBusy = false;
         }
 
 
@@ -552,10 +481,50 @@ namespace ShoppingList.MVVM.ViewModels
         {
             if (shopList != null)
             {
-                SelectedList = shopList;
+                SelectedList = shopList;              
 
                 await Shell.Current.GoToAsync("ProductsView");
             }
+        }
+
+
+        [RelayCommand]
+        private async Task UnmarkAllProducts()
+        {
+            IsBusy = true;
+
+            if (SelectedList != null)
+            {
+                var products = (await _databaseService.Client
+                                            .Child("Products")
+                                            .OnceAsync<Products>())
+                                            .Where(p => p.Object.ShopListName == SelectedList.Name)
+                                            .ToList();
+
+                //// Si hay productos relacionados, actualizar cada uno
+                //foreach (var productItem in products)
+                //{
+                //    if (productItem.Object.IsChecked) // Solo si está marcado
+                //    {
+                //        productItem.Object.IsChecked = false; // Desmarcar
+
+                //        await _databaseService.Client.Child($"Products/{productItem.Key}").PutAsync(productItem.Object);
+                //    }
+                //}
+
+                 // Si hay productos relacionados, actualizar cada uno
+                foreach (var productItem in products)
+                {
+                    if (productItem.Object.IsChecked) // Solo si está marcado
+                    {
+                        productItem.Object.IsChecked = false; // Desmarcar
+
+                        await _databaseService.Client.Child($"Products/{productItem.Key}").PutAsync(productItem.Object);
+                    }
+                }
+            }                 
+
+            IsBusy = false;
         }
 
 
@@ -565,6 +534,8 @@ namespace ShoppingList.MVVM.ViewModels
            var listCode = await Shell.Current.DisplayPromptAsync("Code", "Enter shared Code", "Ok", "Cancel");
 
             if (string.IsNullOrEmpty(listCode)) return;
+
+            IsBusy = true;
 
             // Obtén todas las listas de compras de Firebase
             var shopListSnapshot = await _databaseService.Client
@@ -581,7 +552,8 @@ namespace ShoppingList.MVVM.ViewModels
                 var shopList = existingShopList.Object;
 
                 // Añadir el UserId a la lista de usuarios
-                string userId = Preferences.Get("UserId", string.Empty); // Cambia "UserId" por la clave correcta en tus preferencias
+                var userId = Preferences.Get("UserId", null); // Cambia "UserId" por la clave correcta en tus preferencias
+
                 if (!string.IsNullOrEmpty(userId) && !shopList.Users.Contains(userId))
                 {
                     shopList.Users.Add(userId);
@@ -596,6 +568,19 @@ namespace ShoppingList.MVVM.ViewModels
             {
                 await Shell.Current.DisplayAlert("Error", "Code is not correct", "OK");
             }
+
+            IsBusy = false;
+        }
+
+        [RelayCommand]
+        private async Task LogOut()
+        {
+            if(await Shell.Current.DisplayAlert("LOGOUT", "Do you really want to Logout?", "YES", "NO"))
+            {
+                Preferences.Remove("UserId");
+
+                await Shell.Current.GoToAsync("//LoginView");
+            }         
         }
 
         #endregion

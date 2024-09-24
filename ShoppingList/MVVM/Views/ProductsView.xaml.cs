@@ -12,7 +12,7 @@ public partial class ProductsView : ContentPage
         BindingContext = vm;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
 
@@ -20,31 +20,11 @@ public partial class ProductsView : ContentPage
 
         if (vm != null)
         {
-            vm.ProductsList.Clear();
+            vm.ProductsList.Clear();            
+         
+            await Task.Delay(500);
 
-            vm.GetProducts();
+            await vm.GetProducts();
         }      
-    }
-
-    private void checkBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        //var isBusy = false;
-
-        //if (isBusy) return;
-
-        //isBusy = true;
-
-        //// Obtén el CheckBox que lanzó el evento
-        //var checkBox = sender as CheckBox;
-
-        //// Obtén el objeto de producto a través del BindingContext del CheckBox
-        //var product = checkBox?.BindingContext as Products;
-
-        //var vm = BindingContext as MainPageViewModel;
-
-        //if (product != null && vm != null)
-        //{
-        //    await vm.UpdateProduct(product);
-        //}
-    }
+    }  
 }
