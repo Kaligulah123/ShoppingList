@@ -41,11 +41,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<!-- App Icon -->	
+		<MauiIcon Include="Resources\AppIcon\shoplistapp_icon.png" ForegroundScale ="0.65" BackgroundColor ="#0000FF"/>
+		
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\shoplistapp_icon.png" Color="#ececec" BaseSize="128,128" Resize="False" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -59,6 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AppIcon\shoplistapp_icon.png" />
 	  <None Remove="Resources\Images\copy_alt_regular_60.png" />
 	  <None Remove="Resources\Images\edit_solid_24.png" />
 	  <None Remove="Resources\Images\heart_regular_24.png" />

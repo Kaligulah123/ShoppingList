@@ -1,5 +1,6 @@
 ﻿using Firebase.Database;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 using ShoppingList.Data;
 using ShoppingList.MVVM.ViewModels;
 using ShoppingList.MVVM.Views;
@@ -32,8 +33,7 @@ namespace ShoppingList
 
             builder.Services.AddTransient<RegisterView>();
 
-            builder.Services.AddTransient<ProductsView>();
-                           
+            builder.Services.AddTransient<ProductsView>();           
 
             return builder.Build();           
         }
